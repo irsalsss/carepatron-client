@@ -1,5 +1,6 @@
 "use client";
 
+import createClientMutation from "@/api/@mutation/create-client-mutation/create-client-mutation";
 import Button from "@/components/shared/button/button";
 import Input from "@/components/shared/input/input";
 import Modal from "@/components/shared/modal/modal";
@@ -13,6 +14,8 @@ import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
+import { useQueryClient } from "@tanstack/react-query";
+import { notify } from "@/components/shared/toaster/toaster";
 
 interface ClientsModalAddEditProps {
   onClose: () => void;
@@ -36,26 +39,42 @@ const ClientsModalAddEdit = ({
 }: ClientsModalAddEditProps) => {
   const [currentStep, setCurrentStep] = useState(0);
 
+  const queryClient = useQueryClient();
+
   const {
     control,
     formState: { isDirty, isValid },
-    // trigger,
+    trigger,
     handleSubmit,
   } = useForm<ClientInterface>({
     mode: "onChange",
     // defaultValues: detailClient,
   });
 
+  const { mutate: createClient } = createClientMutation();
+
   const handleClickContinue = () => {
     setCurrentStep(currentStep + 1);
+    trigger();
   };
 
   const handleClickBack = () => {
     setCurrentStep(currentStep - 1);
+    trigger();
   };
 
   const handleSubmitModal = (data: ClientInterface) => {
-    console.log("data::: ", data);
+    createClient(data, {
+      onSuccess: () => {
+        queryClient.resetQueries({ queryKey: ["useGetClientsQuery"] });
+
+        notify("Successfully created");
+        onClose();
+      },
+      onError: () => {
+        notify("Something went wrong, please try again");
+      },
+    });
   };
 
   const isDisabled = !isDirty || !isValid;
@@ -121,8 +140,9 @@ const ClientsModalAddEdit = ({
           control={control}
           // defaultValue={detailClient?.email || ""}
           rules={{
-            required: currentStep === 0 ? false : "This field is required",
-            validate: contactlDetailsValidation.email,
+            required: currentStep === 0 ? undefined : "This field is required",
+            validate:
+              currentStep === 0 ? undefined : contactlDetailsValidation.email,
           }}
           render={({ field: { value, onChange }, fieldState: { error } }) => (
             <Input
@@ -144,8 +164,11 @@ const ClientsModalAddEdit = ({
           control={control}
           // defaultValue={detailClient?.phoneNumber || ""}
           rules={{
-            required: currentStep === 0 ? false : "This field is required",
-            validate: contactlDetailsValidation.phoneNumber,
+            required: currentStep === 0 ? undefined : "This field is required",
+            validate:
+              currentStep === 0
+                ? undefined
+                : contactlDetailsValidation.phoneNumber,
           }}
           render={({ field: { value, onChange }, fieldState: { error } }) => (
             <Input
@@ -163,7 +186,7 @@ const ClientsModalAddEdit = ({
   const footerPersonalDetails = (
     <div
       className={twMerge(
-        "flex items-center p-4 md:p-5 border-gray-200 rounded-b dark:border-gray-600",
+        "flex items-center p-4 md:p-5 border-gray-200 rounded-b",
         currentStep === 0 ? "justify-end" : "justify-between"
       )}
     >

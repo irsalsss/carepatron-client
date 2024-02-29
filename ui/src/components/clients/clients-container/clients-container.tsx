@@ -22,18 +22,19 @@ const ClientsContainer = () => {
 
   return (
     <main className='mt-10 w-full flex justify-center'>
-      <div className='flex flex-col w-3/4'>
+      <div className='flex flex-col md:w-3/4 w-[90%]'>
         <h2 className='font-bold text-[24px]'>Client</h2>
 
-        <div className='mt-6 flex items-center justify-between'>
+        <div className='mt-6 flex items-center justify-between gap-4'>
           <Input
-            className='w-[320px]'
+            className='md:w-[320px]'
             icon={<MagnifyingGlassIcon className='h-5 w-5 text-neutral-N600' />}
             placeholder='Search clients...'
           />
 
           <Button
             label='Create new client'
+            className='shrink-0'
             onClick={() => handleOpenModalAddEdit("addModal")}
           />
         </div>

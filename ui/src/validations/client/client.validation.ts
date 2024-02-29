@@ -5,7 +5,7 @@ const generalValidation = (value: string, maxLength?: number) => {
   const MAX_LENGTH = maxLength ?? 15;
 
   if (value.length < MIN_LENGTH || value.length > MAX_LENGTH) {
-    return `Should be at-least 3 - ${MAX_LENGTH} characters`;
+    return `Should be at-least ${MIN_LENGTH} - ${MAX_LENGTH} characters`;
   }
 
   return true;
@@ -23,6 +23,25 @@ export const contactlDetailsValidation: Validator<{
   email: string;
   phoneNumber: string;
 }> = {
-  email: (value) => generalValidation(value, 15),
-  phoneNumber: (value) => generalValidation(value, 15),
+  email: (value: string) => {
+    if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/).test(value)) {
+      return 'Invalid email address'
+    }
+  
+    return true;
+  },
+  phoneNumber: (value: string) => {
+    const MIN_LENGTH = 3;
+    const MAX_LENGTH = 15;
+
+    if (value.length < MIN_LENGTH || value.length > MAX_LENGTH) {
+      return `Should be at-least ${MIN_LENGTH} - ${MAX_LENGTH} characters`;
+    }
+
+    if (!(/^[0-9]+$/).test(value)) {
+      return 'Please enter a number'
+    }
+  
+    return true;
+  },
 };

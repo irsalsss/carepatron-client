@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { Fragment } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface StepperProps {
@@ -13,14 +14,13 @@ interface StepperProps {
 
 const Stepper = ({ steps, currentStep }: StepperProps) => {
   return (
-    <ol className='flex items-center w-full text-sm font-medium text-center sm:text-base gap-6 justify-between'>
+    <ol className='flex items-center w-full text-sm font-medium text-center sm:text-base gap-2 md:gap-6 justify-between'>
       {steps.map((step, index) => {
         const isActiveInLastIndex = index + 1 !== steps.length;
 
         return (
-          <>
+          <Fragment key={step.value}>
             <li
-              key={step.value}
               className={twMerge(
                 "flex items-center gap-6",
                 currentStep < index && "text-gray-500"
@@ -45,9 +45,14 @@ const Stepper = ({ steps, currentStep }: StepperProps) => {
             </li>
 
             {isActiveInLastIndex ? (
-              <div className='w-max min-w-[20px] h-[2px] bg-neutral-300 grow' />
+              <div
+                className={twMerge(
+                  "w-max min-w-[20px] h-[2px] grow",
+                  currentStep === index ? "bg-neutral-300" : "bg-blue-600"
+                )}
+              />
             ) : null}
-          </>
+          </Fragment>
         );
       })}
     </ol>
