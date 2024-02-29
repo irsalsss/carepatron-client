@@ -43,5 +43,5 @@ app.put('/clients/:id', (req: Request, res: Response) => {
 	const client: IClient = req.body;
 	updateClient(client);
 
-	res.status(204);
+	res.send(client)
 });
