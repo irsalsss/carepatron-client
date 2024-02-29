@@ -1,3 +1,5 @@
+"use client";
+
 import { FC, ReactNode, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -75,7 +77,7 @@ export const Button: FC<ButtonProps> = (props) => {
   return (
     <button
       className={twMerge(
-        "flex justify-center rounded-xl px-6 text-sm font-bold",
+        "flex justify-center rounded-xl px-6 text-sm font-medium",
         buttonSize,
         buttonColor,
         className

@@ -1,14 +1,10 @@
-import { MOCK_LIST_CONTACT } from "@/mocks/contact/contact-mock";
+import MOCK_CLIENT_LIST from "@/mocks/client/client-mock";
 import fetchJson from "./fetch-json";
 
 describe("fetchJson", () => {
-  it("should return GetContactsOutput", async () => {
-    const output = await fetchJson("/api/contacts");
+  it("should return GetClientsOutput", async () => {
+    const output = await fetchJson("/clients");
 
-    expect(output).toStrictEqual({
-      data: MOCK_LIST_CONTACT,
-      message: "Success get contact list!",
-      status_code: 200,
-    });
+    expect(output).toStrictEqual(MOCK_CLIENT_LIST);
   });
 });

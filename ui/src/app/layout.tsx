@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Toaster from "@/components/shared/toaster/toaster";
+import { twMerge } from "tailwind-merge";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +27,10 @@ export default function RootLayout({
         <title>Carepatron Project</title>
       </head>
 
-      <body suppressHydrationWarning={true} className={inter.className}>
+      <body
+        suppressHydrationWarning={true}
+        className={twMerge(inter.className, "bg-neutral-100")}
+      >
         <Providers>
           {children}
           <Analytics />

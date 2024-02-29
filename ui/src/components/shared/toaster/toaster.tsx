@@ -1,3 +1,5 @@
+"use client";
+
 import { ToastContainer, ToastOptions, toast } from "react-toastify";
 
 export const notify = (message: string, options?: ToastOptions) =>

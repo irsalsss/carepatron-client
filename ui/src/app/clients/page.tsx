@@ -1,13 +1,16 @@
-import Button from "@/components/shared/button/button";
-import React from "react";
+import { prefetchGetClientsQuery } from "@/api/@query/use-get-clients/use-get-clients";
+import ClientsContainer from "@/components/clients/clients-container/clients-container";
+import queryClient from "@/utils/query-client-server/query-client-server";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
-const ClientPage = () => {
+const ClientsPage = () => {
+  prefetchGetClientsQuery();
+
   return (
-    <main>
-      <div>Home Page</div>
-      <Button label='hi' />
-    </main>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ClientsContainer />
+    </HydrationBoundary>
   );
 };
 
-export default ClientPage;
+export default ClientsPage;

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button should render button successfully 1`] = `
+<body>
+  <div>
+    <button
+      class="flex justify-center rounded-xl px-6 text-sm font-medium py-4 bg-blue-B700 text-white hover:bg-blue-B600 disabled:bg-neutral-N200 disabled:text-disabled"
+    >
+      Click me
+    </button>
+  </div>
+</body>
+`;
