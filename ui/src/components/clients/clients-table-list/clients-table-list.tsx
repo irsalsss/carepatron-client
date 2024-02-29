@@ -11,6 +11,8 @@ import { useMemo, useRef } from "react";
 import ClientsModalAddEdit from "../clients-modal-add-edit/clients-modal-add-edit";
 import { useShallow } from "zustand/react/shallow";
 
+const ROW_HEIGHT = 72;
+
 const ClientsTableList = () => {
   const parentRef = useRef(null);
 
@@ -30,13 +32,6 @@ const ClientsTableList = () => {
     setActiveModal(defaultClient);
   };
 
-  // The virtualizer
-  const rowVirtualizer = useVirtualizer({
-    count: clients.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 72,
-  });
-
   const filteredClients = useMemo(() => {
     return clients.filter((client) =>
       lowerCase(client.firstName + " " + client.lastName).includes(
@@ -45,9 +40,26 @@ const ClientsTableList = () => {
     );
   }, [debouncedValue, clients]);
 
+  const totalHeightRow = useMemo(() => {
+    return ROW_HEIGHT * filteredClients.length;
+  }, [filteredClients]);
+
+  // The virtualizer
+  const rowVirtualizer = useVirtualizer({
+    count: filteredClients.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => ROW_HEIGHT,
+  });
+
   return (
     <>
-      <div ref={parentRef} style={{ height: 400, overflowY: "auto" }}>
+      <div
+        ref={parentRef}
+        style={{
+          height: totalHeightRow > 400 ? 400 : totalHeightRow,
+          overflowY: "auto",
+        }}
+      >
         <div
           className='flex flex-col'
           style={{
