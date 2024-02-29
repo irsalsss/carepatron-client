@@ -17,6 +17,7 @@ import { twMerge } from "tailwind-merge";
 import { useQueryClient } from "@tanstack/react-query";
 import { notify } from "@/components/shared/toaster/toaster";
 import updateClientMutation from "@/api/@mutation/update-client-mutation/update-client-mutation";
+import PhoneInput from "react-phone-input-2";
 
 interface ClientsModalAddEditProps {
   onClose: () => void;
@@ -98,7 +99,7 @@ const ClientsModalAddEdit = ({
     });
   };
 
-  const isDisabled = !isDirty || !isValid;
+  const isDisabled = (!isDirty || !isValid) && isAddMode;
 
   const contentPersonalDetails = (
     <div className='flex flex-col gap-2 mt-2'>
@@ -184,19 +185,17 @@ const ClientsModalAddEdit = ({
           name='phoneNumber'
           control={control}
           defaultValue={detailClient?.phoneNumber || ""}
-          rules={{
-            required: currentStep === 0 ? undefined : "This field is required",
-            validate:
-              currentStep === 0
-                ? undefined
-                : contactlDetailsValidation.phoneNumber,
-          }}
-          render={({ field: { value, onChange }, fieldState: { error } }) => (
-            <Input
-              id='phoneNumber'
+          render={({ field: { value, onChange } }) => (
+            <PhoneInput
+              onChange={(_, __, ___, formattedValue) =>
+                onChange(formattedValue)
+              }
               value={value}
-              onChange={onChange}
-              error={error?.message}
+              country='id'
+              autoFormat
+              inputProps={{
+                id: "phoneNumber",
+              }}
             />
           )}
         />

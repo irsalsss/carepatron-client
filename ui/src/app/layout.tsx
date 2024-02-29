@@ -1,9 +1,11 @@
+import "react-toastify/dist/ReactToastify.css";
+import "react-phone-input-2/lib/style.css";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "@/utils/query-client/query-client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import "react-toastify/dist/ReactToastify.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Toaster from "@/components/shared/toaster/toaster";

@@ -35,7 +35,7 @@ const ClientsContainer = () => {
     setOpenModalAddEdit(id);
   };
 
-  const handleCloseModalAddedit = () => {
+  const handleCloseModalAddEdit = () => {
     setOpenModalAddEdit("");
     setDetailClient(defaultClient);
   };
@@ -89,7 +89,7 @@ const ClientsContainer = () => {
 
       {openModalAddEdit.length > 0 ? (
         <ClientsModalAddEdit
-          onClose={handleCloseModalAddedit}
+          onClose={handleCloseModalAddEdit}
           isAddMode={openModalAddEdit === "addModal"}
           detailClient={detailClient}
         />
