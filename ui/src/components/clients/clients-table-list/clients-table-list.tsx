@@ -6,9 +6,13 @@ import { useRef } from "react";
 
 interface ClientsTableListProps {
   clients: Array<ClientInterface>;
+  onClickFullName: (client: ClientInterface) => void;
 }
 
-const ClientsTableList = ({ clients }: ClientsTableListProps) => {
+const ClientsTableList = ({
+  clients,
+  onClickFullName,
+}: ClientsTableListProps) => {
   const parentRef = useRef(null);
 
   // The virtualizer
@@ -40,8 +44,11 @@ const ClientsTableList = ({ clients }: ClientsTableListProps) => {
               transform: `translateY(${virtualItem.start}px)`,
             }}
           >
-            <div className='col-span-4 truncate'>
-              <span className='font-regular capitalize'>
+            <div
+              className='col-span-4 truncate cursor-pointer'
+              onClick={() => onClickFullName(clients[virtualItem.index])}
+            >
+              <span className='font-regular capitalize text-blue-600'>
                 {clients[virtualItem.index].firstName}{" "}
                 {clients[virtualItem.index].lastName}
               </span>

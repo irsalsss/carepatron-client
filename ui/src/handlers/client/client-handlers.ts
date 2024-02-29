@@ -10,7 +10,7 @@ const clientHandlers = [
     );
   }),
 
-  rest.put(env.API_URL + "/clients", (_, res, ctx) => {
+  rest.put(env.API_URL + "/clients/:id", (_, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json(MOCK_CLIENT_LIST[0])

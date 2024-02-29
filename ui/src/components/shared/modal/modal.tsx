@@ -5,16 +5,16 @@ interface ModalProps {
   title: string;
   content: ReactNode;
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit?: () => void;
   customFooter?: ReactNode;
 }
 
 const Modal = ({
   title,
   onClose,
-  onSubmit,
   content,
   customFooter,
+  onSubmit = () => {},
 }: ModalProps) => {
   return (
     <>

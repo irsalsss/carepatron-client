@@ -16,10 +16,12 @@ import { Controller, useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import { useQueryClient } from "@tanstack/react-query";
 import { notify } from "@/components/shared/toaster/toaster";
+import updateClientMutation from "@/api/@mutation/update-client-mutation/update-client-mutation";
 
 interface ClientsModalAddEditProps {
   onClose: () => void;
-  onSubmit: () => void;
+  isAddMode: boolean;
+  detailClient?: ClientInterface;
 }
 
 const steps = [
@@ -35,7 +37,8 @@ const steps = [
 
 const ClientsModalAddEdit = ({
   onClose,
-  onSubmit,
+  detailClient,
+  isAddMode,
 }: ClientsModalAddEditProps) => {
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -48,10 +51,12 @@ const ClientsModalAddEdit = ({
     handleSubmit,
   } = useForm<ClientInterface>({
     mode: "onChange",
-    // defaultValues: detailClient,
+    defaultValues: detailClient,
   });
 
   const { mutate: createClient } = createClientMutation();
+
+  const { mutate: updateClient } = updateClientMutation();
 
   const handleClickContinue = () => {
     setCurrentStep(currentStep + 1);
@@ -64,11 +69,27 @@ const ClientsModalAddEdit = ({
   };
 
   const handleSubmitModal = (data: ClientInterface) => {
-    createClient(data, {
+    if (isAddMode) {
+      createClient(data, {
+        onSuccess: () => {
+          queryClient.resetQueries({ queryKey: ["useGetClientsQuery"] });
+
+          notify("Successfully created");
+          onClose();
+        },
+        onError: () => {
+          notify("Something went wrong, please try again");
+        },
+      });
+
+      return;
+    }
+
+    updateClient(data, {
       onSuccess: () => {
         queryClient.resetQueries({ queryKey: ["useGetClientsQuery"] });
 
-        notify("Successfully created");
+        notify("Successfully updated");
         onClose();
       },
       onError: () => {
@@ -88,7 +109,7 @@ const ClientsModalAddEdit = ({
         <Controller
           name='firstName'
           control={control}
-          // defaultValue={detailClient?.firstName || ""}
+          defaultValue={detailClient?.firstName || ""}
           rules={{
             required: "This field is required",
             validate: personalDetailsValidation.firstName,
@@ -111,7 +132,7 @@ const ClientsModalAddEdit = ({
         <Controller
           name='lastName'
           control={control}
-          // defaultValue={detailClient?.lastName || ""}
+          defaultValue={detailClient?.lastName || ""}
           rules={{
             required: "This field is required",
             validate: personalDetailsValidation.lastName,
@@ -138,7 +159,7 @@ const ClientsModalAddEdit = ({
         <Controller
           name='email'
           control={control}
-          // defaultValue={detailClient?.email || ""}
+          defaultValue={detailClient?.email || ""}
           rules={{
             required: currentStep === 0 ? undefined : "This field is required",
             validate:
@@ -162,7 +183,7 @@ const ClientsModalAddEdit = ({
         <Controller
           name='phoneNumber'
           control={control}
-          // defaultValue={detailClient?.phoneNumber || ""}
+          defaultValue={detailClient?.phoneNumber || ""}
           rules={{
             required: currentStep === 0 ? undefined : "This field is required",
             validate:
@@ -223,7 +244,6 @@ const ClientsModalAddEdit = ({
         </div>
       }
       onClose={onClose}
-      onSubmit={onSubmit}
       customFooter={footerPersonalDetails}
     />
   );

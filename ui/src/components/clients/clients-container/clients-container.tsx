@@ -8,9 +8,20 @@ import Input from "@/components/shared/input/input";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import ClientsModalAddEdit from "../clients-modal-add-edit/clients-modal-add-edit";
+import ClientInterface from "@/interfaces/client/client.interface";
+
+const defaultClient = {
+  id: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+};
 
 const ClientsContainer = () => {
   const [openModalAddEdit, setOpenModalAddEdit] = useState("");
+  const [detailClient, setDetailClient] =
+    useState<ClientInterface>(defaultClient);
 
   const { data: clients = [] } = useGetClientsQuery();
 
@@ -18,7 +29,15 @@ const ClientsContainer = () => {
     setOpenModalAddEdit(id);
   };
 
-  const handleSubmitModalAddEdit = () => {};
+  const handleCloseModalAddedit = () => {
+    setOpenModalAddEdit("");
+    setDetailClient(defaultClient);
+  };
+
+  const handleClickFullName = (client: ClientInterface) => {
+    setOpenModalAddEdit(client.id);
+    setDetailClient(client);
+  };
 
   return (
     <main className='mt-10 w-full flex justify-center'>
@@ -41,14 +60,19 @@ const ClientsContainer = () => {
 
         <div className='mt-4 bg-white rounded-[16px]'>
           <ClientsTableHeader />
-          <ClientsTableList clients={clients} />
+
+          <ClientsTableList
+            clients={clients}
+            onClickFullName={handleClickFullName}
+          />
         </div>
       </div>
 
-      {openModalAddEdit === "addModal" ? (
+      {openModalAddEdit.length > 0 ? (
         <ClientsModalAddEdit
-          onClose={() => handleOpenModalAddEdit("")}
-          onSubmit={handleSubmitModalAddEdit}
+          onClose={handleCloseModalAddedit}
+          isAddMode={openModalAddEdit === "addModal"}
+          detailClient={detailClient}
         />
       ) : null}
     </main>
