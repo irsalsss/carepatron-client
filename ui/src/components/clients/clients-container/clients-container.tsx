@@ -6,9 +6,11 @@ import ClientsTableList from "@/components/clients/clients-table-list/clients-ta
 import Button from "@/components/shared/button/button";
 import Input from "@/components/shared/input/input";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ClientsModalAddEdit from "../clients-modal-add-edit/clients-modal-add-edit";
 import ClientInterface from "@/interfaces/client/client.interface";
+import useDebounce from "@/utils/use-debounce/use-debounce";
+import { lowerCase } from "lodash-es";
 
 const defaultClient = {
   id: "",
@@ -22,6 +24,10 @@ const ClientsContainer = () => {
   const [openModalAddEdit, setOpenModalAddEdit] = useState("");
   const [detailClient, setDetailClient] =
     useState<ClientInterface>(defaultClient);
+
+  const [value, setValue] = useState("");
+
+  const debouncedValue = useDebounce<string>(value, 500);
 
   const { data: clients = [] } = useGetClientsQuery();
 
@@ -39,6 +45,18 @@ const ClientsContainer = () => {
     setDetailClient(client);
   };
 
+  const handleSearch = (value: string) => {
+    setValue(value);
+  };
+
+  const filteredClients = useMemo(() => {
+    return clients.filter((client) =>
+      lowerCase(client.firstName + " " + client.lastName).includes(
+        debouncedValue
+      )
+    );
+  }, [debouncedValue, clients]);
+
   return (
     <main className='mt-10 w-full flex justify-center'>
       <div className='flex flex-col md:w-3/4 w-[90%]'>
@@ -49,6 +67,7 @@ const ClientsContainer = () => {
             className='md:w-[320px]'
             icon={<MagnifyingGlassIcon className='h-5 w-5 text-neutral-N600' />}
             placeholder='Search clients...'
+            onChange={(e) => handleSearch(e.target.value)}
           />
 
           <Button
@@ -62,7 +81,7 @@ const ClientsContainer = () => {
           <ClientsTableHeader />
 
           <ClientsTableList
-            clients={clients}
+            clients={filteredClients}
             onClickFullName={handleClickFullName}
           />
         </div>
