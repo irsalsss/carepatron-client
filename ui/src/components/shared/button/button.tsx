@@ -6,6 +6,7 @@ import { twMerge } from "tailwind-merge";
 enum ButtonTypeEnum {
   "primary" = "primary",
   "secondary" = "secondary",
+  "text-button" = "text-button",
 }
 
 enum ButtonSizeEnum {
@@ -42,6 +43,8 @@ export const Button: FC<ButtonProps> = (props) => {
    */
   const buttonColor = useMemo(() => {
     switch (type) {
+      case "text-button":
+        return "bg-transparent text-button disabled:text-disabled hover:text-blue-600 text-[0.875rem] font-bold leading-[1.25rem] tracking-[1.25px]";
       case "secondary":
         return "bg-blue-B200 text-button hover:bg-blue-B100 disabled:bg-neutral-N200 disabled:text-disabled";
       default:
@@ -71,7 +74,7 @@ export const Button: FC<ButtonProps> = (props) => {
    * render icon based on icon props
    */
   const svgIcon = useMemo(() => {
-    return icon ? <div className={twMerge("mr-3", svgSize)}>{icon}</div> : null;
+    return icon ? <div className={twMerge("mr-2", svgSize)}>{icon}</div> : null;
   }, [icon, svgSize]);
 
   return (

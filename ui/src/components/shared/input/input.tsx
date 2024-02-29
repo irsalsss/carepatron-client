@@ -28,7 +28,7 @@ const Input = (inputProps: InputProps) => {
         {...props}
       />
 
-      {error ? <span className='text-red'>{error}</span> : null}
+      {error ? <span className='text-red-500 text-sm'>{error}</span> : null}
     </div>
   );
 };

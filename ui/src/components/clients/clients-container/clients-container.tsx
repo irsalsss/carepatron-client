@@ -6,9 +6,19 @@ import ClientsTableList from "@/components/clients/clients-table-list/clients-ta
 import Button from "@/components/shared/button/button";
 import Input from "@/components/shared/input/input";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import ClientsModalAddEdit from "../clients-modal-add-edit/clients-modal-add-edit";
 
 const ClientsContainer = () => {
+  const [openModalAddEdit, setOpenModalAddEdit] = useState("");
+
   const { data: clients = [] } = useGetClientsQuery();
+
+  const handleOpenModalAddEdit = (id: string) => {
+    setOpenModalAddEdit(id);
+  };
+
+  const handleSubmitModalAddEdit = () => {};
 
   return (
     <main className='mt-10 w-full flex justify-center'>
@@ -22,7 +32,10 @@ const ClientsContainer = () => {
             placeholder='Search clients...'
           />
 
-          <Button label='Create new client' />
+          <Button
+            label='Create new client'
+            onClick={() => handleOpenModalAddEdit("addModal")}
+          />
         </div>
 
         <div className='mt-4 bg-white rounded-[16px]'>
@@ -30,6 +43,13 @@ const ClientsContainer = () => {
           <ClientsTableList clients={clients} />
         </div>
       </div>
+
+      {openModalAddEdit === "addModal" ? (
+        <ClientsModalAddEdit
+          onClose={() => handleOpenModalAddEdit("")}
+          onSubmit={handleSubmitModalAddEdit}
+        />
+      ) : null}
     </main>
   );
 };

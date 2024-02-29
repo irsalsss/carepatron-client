@@ -44,7 +44,7 @@ exports[`Input should render input with icon and error successfully 1`] = `
         placeholder="Search ..."
       />
       <span
-        class="text-red"
+        class="text-red-500 text-sm"
       >
         should be filled
       </span>
