@@ -18,6 +18,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { notify } from "@/components/shared/toaster/toaster";
 import updateClientMutation from "@/api/@mutation/update-client-mutation/update-client-mutation";
 import PhoneInput from "react-phone-input-2";
+import { useTranslations } from "next-intl";
 
 interface ClientsModalAddEditProps {
   onClose: () => void;
@@ -41,7 +42,9 @@ const ClientsModalAddEdit = ({
   detailClient,
   isAddMode,
 }: ClientsModalAddEditProps) => {
-  const titleModal = isAddMode ? "Create client" : "Update client";
+  const t = useTranslations('Clients');
+
+  const titleModal = isAddMode ? t('create_title') : t('update_title');
   const [currentStep, setCurrentStep] = useState(0);
 
   const queryClient = useQueryClient();

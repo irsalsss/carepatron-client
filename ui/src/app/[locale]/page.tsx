@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
-const Home = () => {
-  redirect("/clients");
+const Home = ({ params: { locale } }: { params: { locale: string }}) => {
+  redirect(`/${locale}/clients`);
 
   return (
     <main>

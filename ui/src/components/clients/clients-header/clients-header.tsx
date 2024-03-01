@@ -6,9 +6,12 @@ import useClientStore, {
   defaultClient,
 } from "@/stores/client/use-client-store";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { useTranslations } from "next-intl";
 import { useShallow } from "zustand/react/shallow";
 
 const ClientsHeader = () => {
+  const t = useTranslations('Clients');
+
   const [setSearch, setActiveModal] = useClientStore(
     useShallow((state) => [state.setSearch, state.setActiveModal])
   );
@@ -26,7 +29,7 @@ const ClientsHeader = () => {
         />
 
         <Button
-          label='Create new client'
+          label={t('create_new_title')}
           className='shrink-0'
           onClick={() => setActiveModal({ ...defaultClient, id: "addModal" })}
         />

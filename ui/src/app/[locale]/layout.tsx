@@ -3,7 +3,7 @@ import "react-phone-input-2/lib/style.css";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Providers from "@/utils/query-client/query-client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Toaster from "@/components/shared/toaster/toaster";
@@ -18,11 +18,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params: { locale }
 }: Readonly<{
   children: React.ReactNode;
+  params: {locale: string};
 }>) {
   return (
-    <html lang='en'>
+    <html lang={locale}>
       <head>
         <title>Carepatron Project</title>
       </head>
