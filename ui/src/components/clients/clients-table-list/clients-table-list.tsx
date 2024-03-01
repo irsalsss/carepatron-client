@@ -106,6 +106,12 @@ const ClientsTableList = () => {
         </div>
       </div>
 
+      {search.length > 0 && filteredClients.length === 0 ? (
+        <div className="flex justify-center items-center p-6">
+          <span>The result is empty</span>
+        </div>
+      ) : null}
+
       {activeModal.id.length > 0 ? (
         <ClientsModalAddEdit
           onClose={handleCloseModalAddEdit}
