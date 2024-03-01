@@ -12,7 +12,6 @@ export interface UpdateClientOutput extends ResponseInterface {
 export const updateClient = async (
   data: ClientInterface
 ): Promise<UpdateClientOutput> => {
-
   const response = await fetchJson<ResponseInterface>("/clients/" + data.id, {
     method: "PUT",
     body: JSON.stringify(data),

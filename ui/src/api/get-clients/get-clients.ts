@@ -20,10 +20,7 @@ interface GetClientsResponse extends ResponseInterface {
 export const getClients = async (
   options?: RequestInit
 ): Promise<GetClientsOutput> => {
-  const response = await fetchJson<GetClientsResponse>(
-    "/clients",
-    options
-  );
+  const response = await fetchJson<GetClientsResponse>("/clients", options);
 
   return mapToCamelCase(response);
 };

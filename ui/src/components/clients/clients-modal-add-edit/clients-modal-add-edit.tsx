@@ -41,6 +41,7 @@ const ClientsModalAddEdit = ({
   detailClient,
   isAddMode,
 }: ClientsModalAddEditProps) => {
+  const titleModal = isAddMode ? "Create client" : "Update client";
   const [currentStep, setCurrentStep] = useState(0);
 
   const queryClient = useQueryClient();
@@ -70,8 +71,16 @@ const ClientsModalAddEdit = ({
   };
 
   const handleSubmitModal = (data: ClientInterface) => {
+    const payload: ClientInterface = {
+      ...data,
+      email: data.email.toLocaleLowerCase(),
+      firstName: data.firstName.trim(),
+      lastName: data.lastName.trim(),
+      phoneNumber: data.phoneNumber.length > 0 ? data.phoneNumber : "+62",
+    };
+
     if (isAddMode) {
-      createClient(data, {
+      createClient(payload, {
         onSuccess: () => {
           queryClient.resetQueries({ queryKey: ["useGetClientsQuery"] });
 
@@ -86,7 +95,7 @@ const ClientsModalAddEdit = ({
       return;
     }
 
-    updateClient(data, {
+    updateClient(payload, {
       onSuccess: () => {
         queryClient.resetQueries({ queryKey: ["useGetClientsQuery"] });
 
@@ -100,108 +109,6 @@ const ClientsModalAddEdit = ({
   };
 
   const isDisabled = (!isDirty || !isValid) && isAddMode;
-
-  const contentPersonalDetails = (
-    <div className='flex flex-col gap-2 mt-2'>
-      <div className='flex flex-col gap-1'>
-        <label className='text-[12px] text-neutral-400' htmlFor='firstName'>
-          First name
-        </label>
-        <Controller
-          name='firstName'
-          control={control}
-          defaultValue={detailClient?.firstName || ""}
-          rules={{
-            required: "This field is required",
-            validate: personalDetailsValidation.firstName,
-          }}
-          render={({ field: { value, onChange }, fieldState: { error } }) => (
-            <Input
-              id='firstName'
-              value={value}
-              onChange={onChange}
-              error={error?.message}
-            />
-          )}
-        />
-      </div>
-
-      <div className='flex flex-col gap-1'>
-        <label className='text-[12px] text-neutral-400' htmlFor='lastName'>
-          Last name
-        </label>
-        <Controller
-          name='lastName'
-          control={control}
-          defaultValue={detailClient?.lastName || ""}
-          rules={{
-            required: "This field is required",
-            validate: personalDetailsValidation.lastName,
-          }}
-          render={({ field: { value, onChange }, fieldState: { error } }) => (
-            <Input
-              id='lastName'
-              value={value}
-              onChange={onChange}
-              error={error?.message}
-            />
-          )}
-        />
-      </div>
-    </div>
-  );
-
-  const contentContactDetails = (
-    <div className='flex flex-col gap-2 mt-2'>
-      <div className='flex flex-col gap-1'>
-        <label className='text-[12px] text-neutral-400' htmlFor='email'>
-          Email
-        </label>
-        <Controller
-          name='email'
-          control={control}
-          defaultValue={detailClient?.email || ""}
-          rules={{
-            required: currentStep === 0 ? undefined : "This field is required",
-            validate:
-              currentStep === 0 ? undefined : contactlDetailsValidation.email,
-          }}
-          render={({ field: { value, onChange }, fieldState: { error } }) => (
-            <Input
-              id='email'
-              value={value}
-              onChange={onChange}
-              error={error?.message}
-            />
-          )}
-        />
-      </div>
-
-      <div className='flex flex-col gap-1'>
-        <label className='text-[12px] text-neutral-400' htmlFor='phoneNumber'>
-          Phone number
-        </label>
-        <Controller
-          name='phoneNumber'
-          control={control}
-          defaultValue={detailClient?.phoneNumber || ""}
-          render={({ field: { value, onChange } }) => (
-            <PhoneInput
-              onChange={(_, __, ___, formattedValue) =>
-                onChange(formattedValue)
-              }
-              value={value}
-              country='id'
-              autoFormat
-              inputProps={{
-                id: "phoneNumber",
-              }}
-            />
-          )}
-        />
-      </div>
-    </div>
-  );
 
   const footerPersonalDetails = (
     <div
@@ -221,7 +128,7 @@ const ClientsModalAddEdit = ({
 
       <Button
         disabled={isDisabled}
-        label={currentStep === 0 ? "Continue" : "Create client"}
+        label={currentStep === 0 ? "Continue" : titleModal}
         onClick={
           currentStep === 0
             ? handleClickContinue
@@ -233,13 +140,129 @@ const ClientsModalAddEdit = ({
 
   return (
     <Modal
-      title='Create new client'
+      title={titleModal}
       content={
         <div className='flex flex-col gap-3'>
           <Stepper steps={steps} currentStep={currentStep} />
 
-          {currentStep === 0 ? contentPersonalDetails : null}
-          {currentStep === 1 ? contentContactDetails : null}
+          {currentStep === 0 ? (
+            <div className='flex flex-col gap-2 mt-2'>
+              <div className='flex flex-col gap-1'>
+                <label
+                  className='text-[12px] text-neutral-400'
+                  htmlFor='firstName'
+                >
+                  First name
+                </label>
+                <Controller
+                  name='firstName'
+                  control={control}
+                  defaultValue={detailClient?.firstName || ""}
+                  rules={{
+                    required: "This field is required",
+                    validate: personalDetailsValidation.firstName,
+                  }}
+                  render={({
+                    field: { value, onChange },
+                    fieldState: { error },
+                  }) => (
+                    <Input
+                      id='firstName'
+                      value={value}
+                      onChange={onChange}
+                      error={error?.message}
+                    />
+                  )}
+                />
+              </div>
+
+              <div className='flex flex-col gap-1'>
+                <label
+                  className='text-[12px] text-neutral-400'
+                  htmlFor='lastName'
+                >
+                  Last name
+                </label>
+                <Controller
+                  name='lastName'
+                  control={control}
+                  defaultValue={detailClient?.lastName || ""}
+                  rules={{
+                    required: "This field is required",
+                    validate: personalDetailsValidation.lastName,
+                  }}
+                  render={({
+                    field: { value, onChange },
+                    fieldState: { error },
+                  }) => (
+                    <Input
+                      id='lastName'
+                      value={value}
+                      onChange={onChange}
+                      error={error?.message}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          ) : null}
+
+          {currentStep === 1 ? (
+            <div className='flex flex-col gap-2 mt-2'>
+              <div className='flex flex-col gap-1'>
+                <label className='text-[12px] text-neutral-400' htmlFor='email'>
+                  Email
+                </label>
+                <Controller
+                  name='email'
+                  control={control}
+                  defaultValue={detailClient?.email || ""}
+                  rules={{
+                    required: "This field is required",
+                    validate: contactlDetailsValidation.email,
+                  }}
+                  render={({
+                    field: { value, onChange },
+                    fieldState: { error },
+                  }) => (
+                    <Input
+                      id='email'
+                      value={value}
+                      onChange={onChange}
+                      error={error?.message}
+                    />
+                  )}
+                />
+              </div>
+
+              <div className='flex flex-col gap-1'>
+                <label
+                  className='text-[12px] text-neutral-400'
+                  htmlFor='phoneNumber'
+                >
+                  Phone number
+                </label>
+                <Controller
+                  name='phoneNumber'
+                  control={control}
+                  defaultValue={detailClient?.phoneNumber || ""}
+                  render={({ field: { value, onChange } }) => (
+                    <PhoneInput
+                      onChange={(_, __, ___, formattedValue) =>
+                        onChange(formattedValue)
+                      }
+                      value={value}
+                      country='id'
+                      autoFormat
+                      inputProps={{
+                        id: "phoneNumber",
+                      }}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          ) : null}
         </div>
       }
       onClose={onClose}

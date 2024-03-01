@@ -14,18 +14,13 @@ describe("useGetClientsQuery", () => {
       expect(result.current.isSuccess).toBeTruthy();
     });
 
-    expect(result.current.data).toStrictEqual(
-      mapToCamelCase(MOCK_CLIENT_LIST)
-    );
+    expect(result.current.data).toStrictEqual(mapToCamelCase(MOCK_CLIENT_LIST));
   });
 
   it("should run prefetchGetClientsQuery", async () => {
-    const { result } = renderHook(
-      async () => await prefetchGetClientsQuery(),
-      {
-        wrapper: wrapperReactQuery,
-      }
-    );
+    const { result } = renderHook(async () => await prefetchGetClientsQuery(), {
+      wrapper: wrapperReactQuery,
+    });
 
     expect(await result.current).toStrictEqual(
       mapToCamelCase(MOCK_CLIENT_LIST)

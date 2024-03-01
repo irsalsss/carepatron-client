@@ -1,5 +1,5 @@
-import ClientInterface from '@/interfaces/client/client.interface';
-import { create } from 'zustand'
+import ClientInterface from "@/interfaces/client/client.interface";
+import { create } from "zustand";
 
 export const defaultClient = {
   id: "",
@@ -18,11 +18,11 @@ interface UseClientStoreState {
 }
 
 const useClientStore = create<UseClientStoreState>()((set) => ({
-  search: '',
-  setSearch: (value) => set(({ search: value })),
+  search: "",
+  setSearch: (value) => set({ search: value }),
 
   activeModal: defaultClient,
-  setActiveModal: (value) => set(({ activeModal: value })),
-}))
+  setActiveModal: (value) => set({ activeModal: value }),
+}));
 
 export default useClientStore;

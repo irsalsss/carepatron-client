@@ -12,7 +12,6 @@ export interface CreateClientOutput extends ResponseInterface {
 export const createClient = async (
   data: ClientInterface
 ): Promise<CreateClientOutput> => {
-
   const response = await fetchJson<ResponseInterface>("/clients", {
     method: "POST",
     body: JSON.stringify(data),

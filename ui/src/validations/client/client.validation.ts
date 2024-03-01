@@ -24,10 +24,10 @@ export const contactlDetailsValidation: Validator<{
   phoneNumber: string;
 }> = {
   email: (value: string) => {
-    if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/).test(value)) {
-      return 'Invalid email address'
+    if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value)) {
+      return "Invalid email address";
     }
-  
+
     return true;
   },
   phoneNumber: (value: string) => {
@@ -38,10 +38,10 @@ export const contactlDetailsValidation: Validator<{
       return `Should be at-least ${MIN_LENGTH} - ${MAX_LENGTH} characters`;
     }
 
-    if (!(/^[0-9]+$/).test(value)) {
-      return 'Please enter a number'
+    if (!/^[0-9]+$/.test(value)) {
+      return "Please enter a number";
     }
-  
+
     return true;
   },
 };
