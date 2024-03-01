@@ -7,13 +7,15 @@ const ClientsTableHeader = () => {
         <span className='font-bold'>Name</span>
       </div>
 
-      <div className='col-span-4'>
+      <div className='col-span-3'>
         <span className='font-bold'>Phone</span>
       </div>
 
       <div className='col-span-4'>
         <span className='font-bold'>Email</span>
       </div>
+
+      <div className='col-span-1' />
     </div>
   );
 };

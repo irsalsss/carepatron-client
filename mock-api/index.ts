@@ -45,3 +45,10 @@ app.put('/clients/:id', (req: Request, res: Response) => {
 
 	res.send(client)
 });
+
+// delete client
+app.delete('/clients/:id', (req: Request, res: Response) => {
+	removeClient(req.params.id);
+
+	res.send('Delete is success')
+});

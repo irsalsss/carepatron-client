@@ -3,7 +3,7 @@ import { getClients } from "./get-clients";
 import MOCK_CLIENT_LIST from "@/mocks/client/client-mock";
 
 describe("getClients", () => {
-  it("should return GetContactsOutput", async () => {
+  it("should return GetCientsOutput", async () => {
     const output = await getClients();
 
     expect(output).toStrictEqual(mapToCamelCase(MOCK_CLIENT_LIST));

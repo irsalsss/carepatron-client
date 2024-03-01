@@ -14,7 +14,10 @@ interface UseClientStoreState {
   setSearch: (value: string) => void;
 
   activeModal: ClientInterface;
-  setActiveModal: (id: ClientInterface) => void;
+  setActiveModal: (client: ClientInterface) => void;
+
+  deleteModal: ClientInterface;
+  setDeleteModal: (client: ClientInterface) => void;
 }
 
 const useClientStore = create<UseClientStoreState>()((set) => ({
@@ -23,6 +26,9 @@ const useClientStore = create<UseClientStoreState>()((set) => ({
 
   activeModal: defaultClient,
   setActiveModal: (value) => set({ activeModal: value }),
+
+  deleteModal: defaultClient,
+  setDeleteModal: (value) => set({ deleteModal: value }),
 }));
 
 export default useClientStore;
